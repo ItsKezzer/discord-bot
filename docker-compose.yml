@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: discord-bot
+    restart: always
+    environment:
+      TOKEN: "$TOKEN"
+      PREFIX: "$PREFIX"
