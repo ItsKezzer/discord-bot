@@ -19,11 +19,16 @@ async def helper(message):
     embed_all = discord.Embed(title='Help for all', description='List of commands are:', color=0x00ff00)
     embed_all.add_field(name=f'{prefix}help', value='Returns this message', inline=False)
     embed_all.add_field(name=f'{prefix}ping', value='Returns the latency of the bot', inline=False)
+    await message.channel.send(embed=embed_all)
+    perms = message.author.guild_permissions
+    if perms.manage_messages or perms.kick_members or perms.administrator:
+        await helper_admin(message)
+
+async def helper_admin(message):
     embed_admin = discord.Embed(title='Help for admin', description='List of admin commands are:', color=0x00ff00)
     embed_admin.add_field(name=f'{prefix}purge n', value='Deletes the last n messages (max: 100)', inline=False)
     embed_admin.add_field(name=f'{prefix}kick @user1 @user2', value='Kicks list of users', inline=False)
     embed_admin.add_field(name=f'{prefix}reactrole :emoji1: @role1 :emoji2: @role2', value='Creates a react for role message', inline=False)
-    await message.channel.send(embed=embed_all)
     await message.author.send(embed=embed_admin)
 
 async def purge(message):
@@ -36,7 +41,7 @@ async def purge(message):
         if n > 100:
             await message.channel.send('Cannot delete more than 100 messages')
         else:
-            await message.channel.purge(limit=n+1)
+            await message.channel.purge(limit=n)
             logging.info(f'{n} messages deleted in {message.guild.name}/{message.channel.name} by {message.author.name}')
     except Exception as e:
         if "403" in str(e):
