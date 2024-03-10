@@ -1,9 +1,8 @@
+## Dependencies
 import discord
 import logging
 from os import getenv
-
-# import dotenv
-# dotenv.load_dotenv()
+import docker_handling
 
 
 ## Initialization
@@ -13,6 +12,7 @@ intents = discord.Intents.all()
 intents.message_content = True
 prefix = getenv('PREFIX', "$")
 client = discord.Client(intents=intents)
+
 
 ## Functions
 async def helper(message):
@@ -100,6 +100,8 @@ async def message_handler(message):
         await kick(message)
     elif message_content.startswith(prefix + 'reactrole'):
         await reactrole(message)
+    elif message_content.startswith(prefix + 'restart'):
+        await docker_handling.mc_restart(message)
 
 def get_role_from_id(guild, role_id):
         for role in guild.roles:
