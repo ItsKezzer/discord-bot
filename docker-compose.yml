@@ -1,12 +1,15 @@
-version: '3.8'
-
 services:
   bot:
     build: .
-    container_name: discord-bot
-    restart: always
+    container_name: bouloumbele-bot-v2
+    restart: unless-stopped
     environment:
-      TOKEN: "$TOKEN"
-      PREFIX: "$PREFIX"
+      TOKEN: "${TOKEN}"
+      ALLOWED_CONTAINERS: "${ALLOWED_CONTAINERS:-mc-modded}"
+      DATA_DIR: "/data"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
     volumes:
+      # Docker socket to allow non-blocking container restarts
       - "/var/run/docker.sock:/var/run/docker.sock"
+      # Persistent storage volume for SQLite permissions and server settings
+      - "./data:/data"
